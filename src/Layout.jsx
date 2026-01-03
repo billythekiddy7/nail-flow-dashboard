@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -230,7 +229,7 @@ function MainLayout({ children, currentPageName }) {
       <SidebarProvider>
         <div className="min-h-screen flex w-full" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-screen w-64 md:w-auto transform transition-transform duration-300 md:transform-none" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)', minHeight: '100vh' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
