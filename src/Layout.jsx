@@ -227,9 +227,9 @@ function MainLayout({ children, currentPageName }) {
       `}</style>
 
       <SidebarProvider>
-        <div className="flex w-full overflow-hidden" style={{ background: 'var(--primary-bg)', height: '100dvh', minHeight: '100dvh' }}>
+        <div className="h-screen flex w-full overflow-hidden" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col shrink-0" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)', height: '100dvh', minHeight: '100dvh' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)', height: '100vh' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
