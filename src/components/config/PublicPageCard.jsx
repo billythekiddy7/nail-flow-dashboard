@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Link as LinkIcon, Copy, ExternalLink } from 'lucide-react';
+import { Link as LinkIcon, Copy, ExternalLink, Lock } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 
 export default function PublicPageCard({ userData, onChange }) {
@@ -47,7 +47,20 @@ export default function PublicPageCard({ userData, onChange }) {
   };
 
   return (
-    <Card className="card-3d" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
+    <Card className="card-3d relative overflow-hidden" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
+      {/* Overlay de bloqueio */}
+      <div className="absolute inset-0 z-10 backdrop-blur-sm bg-black/50 flex flex-col items-center justify-center rounded-xl">
+        <div className="bg-gray-800/90 p-6 rounded-xl text-center max-w-xs">
+          <div className="w-14 h-14 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-7 h-7 text-white" />
+          </div>
+          <h3 className="text-white font-bold text-lg mb-2">Em Breve!</h3>
+          <p className="text-gray-300 text-sm">
+            Esta funcionalidade estará disponível na próxima atualização.
+          </p>
+        </div>
+      </div>
+      
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <LinkIcon className="w-5 h-5 text-blue-500" />
