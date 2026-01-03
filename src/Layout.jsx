@@ -224,11 +224,6 @@ function MainLayout({ children, currentPageName }) {
           background: var(--secondary-bg) !important;
           border-color: var(--border) !important;
         }
-        
-        /* Override para corrigir altura da sidebar */
-        [data-sidebar="sidebar"] {
-          height: 100vh !important;
-          min-height: 100vh !important;
         }
       `}</style>
 
