@@ -1,10 +1,14 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useGlobalState } from "@/components/hooks/useGlobalState";
+import { DashboardMetric } from "@/entities/DashboardMetric";
 import {
   DollarSign, Calendar, Users, TrendingUp, Plus, Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/Toast";
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 
 import MetricsCard from "@/components/ui/metrics-card";
@@ -39,8 +43,8 @@ export default function Dashboard() {
 
     setLoading(true);
     try {
-        // Leitura direta do warehouse de métricas - operação instantânea
-        const metricsFromWarehouse = await base44.entities.DashboardMetric.list();
+      // Leitura direta do warehouse de métricas - operação instantânea
+      const metricsFromWarehouse = await DashboardMetric.list();
       
       if (metricsFromWarehouse && metricsFromWarehouse.length > 0) {
         const warehouseData = metricsFromWarehouse[0];

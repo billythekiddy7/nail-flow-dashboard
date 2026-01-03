@@ -1,13 +1,14 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useTheme } from "@/components/ThemeProvider";
-import { Client, Service } from "@/entities/all";
-import { Calendar, Plus, Filter, Search } from "lucide-react";
+import { Appointment, Client, Service } from "@/entities/all";
+import { Calendar, Clock, Plus, Filter, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { addDays } from "date-fns";
+import { format, addDays, startOfWeek, isSameDay, isToday } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 // Importar componentes
 import ViewToggle from "@/components/agenda/ViewToggle";

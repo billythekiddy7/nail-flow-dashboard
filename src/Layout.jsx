@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -31,6 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress"; // Added Progress import
 import { GlobalProvider, useGlobalState } from "@/components/hooks/useGlobalState"; // Added GlobalProvider and useGlobalState imports - CORRECTED PATH
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { DashboardMetric } from "@/entities/DashboardMetric";
 import { base44 } from "@/api/base44Client"; // Added base44 import
 import { ToastProvider } from "@/components/ui/Toast";
 
@@ -71,8 +73,8 @@ function MainLayout({ children, currentPageName }) {
 
     setLoading(true);
     try {
-        // Busca apenas as métricas do dashboard
-        const metricsData = await base44.entities.DashboardMetric.list('', 1);
+      // Busca apenas as métricas do dashboard
+      const metricsData = await DashboardMetric.list('', 1);
       const metrics = metricsData?.[0] || {};
       const monthlyGoals = user?.monthly_goals || {}; // Use user from global state
 
@@ -226,9 +228,9 @@ function MainLayout({ children, currentPageName }) {
       `}</style>
 
       <SidebarProvider>
-        <div className="min-h-screen flex w-full items-start" style={{ background: 'var(--primary-bg)' }}>
+        <div className="min-h-screen flex w-full" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 min-h-screen h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -245,7 +247,7 @@ function MainLayout({ children, currentPageName }) {
                 </div>
               </SidebarHeader>
 
-              <SidebarContent className="p-3 flex-1" style={{ background: 'var(--secondary-bg)' }}>
+              <SidebarContent className="p-3" style={{ background: 'var(--secondary-bg)' }}>
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-xs font-medium uppercase tracking-wider px-3 py-2" style={{ color: 'var(--text-secondary)' }}>
                     Navegação
@@ -325,6 +327,29 @@ function MainLayout({ children, currentPageName }) {
               </SidebarContent>
 
               <SidebarFooter className="border-t p-4" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
+                <div className="space-y-3">
+                  {/* Informações do usuário */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                        {user?.profile_image ? (
+                          <img src={user.profile_image} alt="Avatar do usuário" className="w-full h-full object-cover" />
+                        ) : (
+                          <Heart className="w-4 h-4 text-white" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate" style={{ color: 'var(--text-primary)' }}>
+                          {user?.business_name || user?.full_name || 'Nail Designer'}
+                        </p>
+                        <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>
+                          Profissional
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Botão de Logout */}
                   <Button
                     variant="outline"
                     onClick={handleLogout}
@@ -339,6 +364,7 @@ function MainLayout({ children, currentPageName }) {
                     </svg>
                     Sair da Conta
                   </Button>
+                </div>
               </SidebarFooter>
             </Sidebar>
           )}

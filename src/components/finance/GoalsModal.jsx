@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Target, DollarSign, TrendingUp, Users, Save } from 'lucide-react';
 import { User } from '@/entities/User';
+import { useUserSettings } from '../hooks/useUserSettings';
 import { useToast } from '../ui/Toast';
 import GradientButton from '../ui/GradientButton';
 

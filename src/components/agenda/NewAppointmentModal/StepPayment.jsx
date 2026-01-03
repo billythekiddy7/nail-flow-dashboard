@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { Scissors, DollarSign } from 'lucide-react';
+import { Scissors, DollarSign, CreditCard } from 'lucide-react';
 
 const PAYMENT_METHODS = [
   { value: 'dinheiro', label: 'Dinheiro', icon: '💵' },

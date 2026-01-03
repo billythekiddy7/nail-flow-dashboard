@@ -4,7 +4,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon, Clock, AlertTriangle } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, addMinutes, setHours, setMinutes } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Appointment } from '@/entities/Appointment';
 

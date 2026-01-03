@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Product } from '@/entities/Product';
 import { Button } from '@/components/ui/button';
-import { Package, Box, Calculator, DollarSign, TrendingUp } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Package, Edit, Trash2, Box, Calculator, DollarSign, TrendingUp } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import NewProductModal from '@/components/inventory/NewProductModal';
 import ProductCard from '@/components/inventory/ProductCard';

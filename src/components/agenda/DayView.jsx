@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Clock, Scissors } from 'lucide-react';
+import { Clock, User, Scissors } from 'lucide-react';
 import { format } from 'date-fns';
 
 export default function DayView({ appointments, clients, services, selectedDate }) {

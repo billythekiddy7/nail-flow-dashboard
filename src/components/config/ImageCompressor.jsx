@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, Image as ImageIcon, Loader2, CheckCircle } from 'lucide-react';
+import { Upload, Image as ImageIcon, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { UploadFile } from '@/integrations/Core';
 
 // Função para comprimir imagem

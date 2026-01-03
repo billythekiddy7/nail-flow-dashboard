@@ -8,12 +8,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, X, Plus, User, Scissors, Package } from 'lucide-react';
+import { CalendarIcon, X, Plus, Minus, User, Scissors, Package, DollarSign, CreditCard } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Client, Service, Product } from '@/entities/all';
+import { Appointment, Client, Service, Product, Payment } from '@/entities/all';
 import { useToast } from '@/components/ui/Toast';
 import GradientButton from '@/components/ui/GradientButton';
 import { createCompleteAttendance } from '@/functions/createCompleteAttendance'; // Importar nova função

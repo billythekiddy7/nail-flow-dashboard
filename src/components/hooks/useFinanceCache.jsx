@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Cache LRU in-memory para dados financeiros
 class LRUCache {

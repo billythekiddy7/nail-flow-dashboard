@@ -11,7 +11,7 @@ import {
   Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { format, isSameDay } from "date-fns";
+import { startOfMonth, endOfMonth, format, isSameDay } from "date-fns";
 import { ptBR } from 'date-fns/locale';
 import { useToast } from "@/components/ui/Toast";
 

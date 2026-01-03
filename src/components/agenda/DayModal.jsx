@@ -6,8 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Check, XCircle, Clock, Scissors } from 'lucide-react';
-import { Appointment } from '@/entities/all';
+import { Check, XCircle, RotateCcw, Clock, User, Scissors } from 'lucide-react';
+import { Appointment, Client, Service } from '@/entities/all';
 import { useToast } from '@/components/ui/Toast';
 
 export default function DayModal({ date, isOpen, onClose, clients = [], services = [] }) {

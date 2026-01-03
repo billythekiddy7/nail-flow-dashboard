@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CheckCircle, XCircle, Loader2, AlertCircle } from 'lucide-react';
+import { User } from '@/entities/User';
 
 // Debounce personalizado para validação
 const useDebounce = (value, delay) => {

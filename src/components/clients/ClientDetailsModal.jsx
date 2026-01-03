@@ -9,14 +9,18 @@ import {
   User,
   Phone,
   Mail,
+  Instagram,
   Calendar,
   DollarSign,
+  Clock,
+  CreditCard,
   Package,
   Star,
   X } from
 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Appointment } from '@/entities/Appointment';
 import GradientButton from '../ui/GradientButton';
 import PaymentModal from './PaymentModal';
 import { getClientSummary } from '@/functions/getClientSummary'; // Import da nova função de backend

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Service } from '@/entities/Service';
+import { Appointment } from '@/entities/Appointment';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Scissors, Edit, Trash2 } from 'lucide-react';

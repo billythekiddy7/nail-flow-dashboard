@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import DayModal from './DayModal';
