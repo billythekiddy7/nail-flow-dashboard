@@ -326,26 +326,7 @@ function MainLayout({ children, currentPageName }) {
 
               <SidebarFooter className="border-t p-4" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="space-y-3">
-                  {/* Informações do usuário */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
-                        {user?.profile_image ? (
-                          <img src={user.profile_image} alt="Avatar do usuário" className="w-full h-full object-cover" />
-                        ) : (
-                          <Heart className="w-4 h-4 text-white" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate" style={{ color: 'var(--text-primary)' }}>
-                          {user?.business_name || user?.full_name || 'Nail Designer'}
-                        </p>
-                        <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>
-                          Profissional
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+
 
                   {/* Botão de Logout */}
                   <Button
