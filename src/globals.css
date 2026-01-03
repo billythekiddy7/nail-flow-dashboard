@@ -1,0 +1,632 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ===========================================
+   ESTILOS PERSONALIZADOS OTIMIZADOS
+   =========================================== */
+
+/* Gradientes e efeitos visuais */
+.gradient-text {
+  background: linear-gradient(135deg, #E6007A, #8B5CF6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.card-3d {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(230, 0, 122, 0.15);
+}
+
+/* ===========================================
+   INPUTS OTIMIZADOS (ANTI-SPINNER)
+   =========================================== */
+
+/* Remoção total dos spinners de input number */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-spin {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+/* ===========================================
+   RESPONSIVIDADE OTIMIZADA MOBILE
+   =========================================== */
+
+/* MODAIS RESPONSIVOS - CORREÇÃO CRÍTICA */
+@media (max-width: 768px) {
+  /* Dialog/Modal containers */
+  [data-radix-popper-content-wrapper],
+  [role="dialog"] {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 2.5vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Específico para DialogContent */
+  .max-w-2xl,
+  .max-w-4xl {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 2.5vw !important;
+  }
+
+  /* Padding interno dos modais */
+  [role="dialog"] > div {
+    padding: 1rem !important;
+  }
+
+  /* Botões em modais */
+  [role="dialog"] .flex.gap-3,
+  [role="dialog"] .flex.gap-2 {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  [role="dialog"] .flex.gap-3 button,
+  [role="dialog"] .flex.gap-2 button {
+    width: 100% !important;
+    min-height: 44px !important;
+  }
+}
+
+/* BOTÕES RESPONSIVOS */
+@media (max-width: 640px) {
+  /* Botões do header */
+  .flex.gap-3 {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .flex.gap-3 > button,
+  .flex.gap-3 > .flex {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Botões de ação específicos */
+  button {
+    min-height: 44px !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+/* GRIDS RESPONSIVOS */
+@media (max-width: 640px) {
+  /* Grid de cards */
+  .grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Grid de métricas */
+  .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Grid de 2 colunas forçado para 1 */
+  .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* FORMULÁRIOS RESPONSIVOS */
+@media (max-width: 640px) {
+  /* Inputs side by side virarem full width */
+  .grid.grid-cols-2.gap-4 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Inputs com padding adequado para touch */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    min-height: 44px !important;
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* Labels com espaçamento adequado */
+  label {
+    margin-bottom: 0.5rem !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+/* TABELAS RESPONSIVAS */
+@media (max-width: 768px) {
+  /* Scroll horizontal para tabelas */
+  .overflow-x-auto {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Cards de tabela empilhados */
+  .space-y-2 > div {
+    padding: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+}
+
+/* NAVEGAÇÃO E SIDEBAR */
+@media (max-width: 768px) {
+  /* Sidebar mobile otimizada */
+  .sidebar-mobile {
+    width: 280px !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  /* Header mobile */
+  .md\\:hidden.border-b {
+    padding: 1rem !important;
+    min-height: 60px !important;
+  }
+}
+
+/* CHARTS E GRÁFICOS */
+@media (max-width: 640px) {
+  /* Recharts responsivo */
+  .recharts-wrapper {
+    width: 100% !important;
+    height: 250px !important;
+  }
+
+  /* Container de gráficos */
+  .h-80 {
+    height: 250px !important;
+  }
+}
+
+/* CORREÇÕES ESPECÍFICAS PARA OS SCREENSHOTS */
+
+/* 1. Modal de Novo Serviço */
+@media (max-width: 768px) {
+  /* Cores do serviço em linha */
+  .flex.gap-2:has(.w-8.h-8.rounded-full) {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+  }
+
+  .w-8.h-8.rounded-full {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    margin: 0.25rem !important;
+  }
+}
+
+/* 2. Página Financeiro - Botões cortados */
+@media (max-width: 640px) {
+  /* Header da página financeiro */
+  .flex.flex-col.md\\:flex-row.justify-between {
+    gap: 1rem !important;
+  }
+
+  .flex.gap-3:last-child {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .flex.gap-3:last-child > button {
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
+
+/* 3. Histórico de Pagamentos - Scroll */
+@media (max-width: 768px) {
+  /* Cards de pagamento */
+  .space-y-2 > div:has(.text-green-500) {
+    padding: 0.75rem !important;
+    border-radius: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Informações do pagamento */
+  .flex.justify-between.items-center {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Badges de status */
+  .bg-green-100 {
+    align-self: flex-end !important;
+  }
+}
+
+/* Grid responsivo com auto-fit */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-min-width, 300px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* Typography responsiva */
+.responsive-text {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.6;
+}
+
+/* Container responsivo */
+.responsive-container {
+  max-width: var(--container-max-width, 1200px);
+  margin: 0 auto;
+  padding: clamp(0.5rem, 4vw, 2rem);
+  width: 100%;
+}
+
+/* Quebras específicas para mobile */
+@media (max-width: 420px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  .lg\\:grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Cards de métricas em mobile */
+  .metrics-card {
+    min-height: clamp(120px, 20vw, 160px);
+  }
+
+  /* Texto menor em telas muito pequenas */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* ===========================================
+   ACESSIBILIDADE (WCAG 2.1 AA/AAA)
+   =========================================== */
+
+/* Foco visual melhorado */
+*:focus {
+  outline: 2px solid #E6007A;
+  outline-offset: 2px;
+}
+
+/* Foco apenas para navegação por teclado */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid #E6007A;
+  outline-offset: 2px;
+}
+
+/* Indicadores de foco para elementos interativos */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #E6007A;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(230, 0, 122, 0.1);
+}
+
+/* Melhor contraste para textos */
+.text-contrast-aa {
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+.dark .text-contrast-aa {
+  color: #ffffff;
+  background: #1a1a1a;
+}
+
+/* Botões com melhor contraste */
+.btn-high-contrast {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.btn-high-contrast:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
+}
+
+/* ===========================================
+   ANIMAÇÕES OTIMIZADAS
+   =========================================== */
+
+/* Respeitar preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .card-3d:hover {
+    transform: none;
+  }
+}
+
+/* Animações suaves para componentes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Animações de entrada para Toast */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-in {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.slide-in-from-right-full {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+/* ===========================================
+   COMPONENTES ESPECÍFICOS
+   =========================================== */
+
+/* Loading spinner otimizado */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #E6007A;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-bg, #f1f1f1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E6007A;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c4006a;
+}
+
+/* ===========================================
+   UTILITÁRIOS DE PERFORMANCE
+   =========================================== */
+
+/* Lazy loading para imagens */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Preload para fontes críticas */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: local('Inter');
+}
+
+/* Otimização de compositing para animações */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* ===========================================
+   PRINT STYLES
+   =========================================== */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .card-3d {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  .glass-effect {
+    background: white !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* ===========================================
+   HIGH CONTRAST MODE
+   =========================================== */
+
+@media (prefers-contrast: high) {
+  .card-3d {
+    border: 2px solid currentColor;
+  }
+  
+  .glass-effect {
+    background: var(--background) !important;
+    border: 2px solid currentColor !important;
+  }
+  
+  .gradient-text {
+    background: none !important;
+    color: currentColor !important;
+    -webkit-text-fill-color: currentColor !important;
+  }
+}
