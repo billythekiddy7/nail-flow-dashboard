@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Grid responsivo com auto-fit e clamp
-export default function ResponsiveGrid({ 
+export function ResponsiveGrid({ 
   children, 
   minItemWidth = '300px', 
   gap = '1.5rem',
