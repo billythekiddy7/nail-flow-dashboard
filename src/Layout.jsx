@@ -226,9 +226,9 @@ function MainLayout({ children, currentPageName }) {
       `}</style>
 
       <SidebarProvider>
-        <div className="min-h-screen flex w-full" style={{ background: 'var(--primary-bg)' }}>
+        <div className="min-h-screen flex w-full items-start" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 min-h-screen h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
