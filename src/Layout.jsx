@@ -245,7 +245,7 @@ function MainLayout({ children, currentPageName }) {
                 </div>
               </SidebarHeader>
 
-              <SidebarContent className="p-3" style={{ background: 'var(--secondary-bg)' }}>
+              <SidebarContent className="p-3 flex-1" style={{ background: 'var(--secondary-bg)' }}>
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-xs font-medium uppercase tracking-wider px-3 py-2" style={{ color: 'var(--text-secondary)' }}>
                     Navegação
@@ -324,13 +324,7 @@ function MainLayout({ children, currentPageName }) {
                 </SidebarGroup>
               </SidebarContent>
 
-              <SidebarFooter className="border-t p-4 mt-auto" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
-                <div className="space-y-3">
-
-
-
-
-                  {/* Botão de Logout */}
+              <SidebarFooter className="border-t p-4" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                   <Button
                     variant="outline"
                     onClick={handleLogout}
@@ -345,7 +339,6 @@ function MainLayout({ children, currentPageName }) {
                     </svg>
                     Sair da Conta
                   </Button>
-                </div>
               </SidebarFooter>
             </Sidebar>
           )}
