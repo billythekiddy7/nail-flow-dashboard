@@ -227,9 +227,9 @@ function MainLayout({ children, currentPageName }) {
       `}</style>
 
       <SidebarProvider>
-        <div className="min-h-screen flex w-full" style={{ background: 'var(--primary-bg)' }}>
+        <div className="h-screen flex w-full overflow-hidden" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-screen w-64 md:w-auto transform transition-transform duration-300 md:transform-none" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)', minHeight: '100vh' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)', height: '100vh' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -246,7 +246,7 @@ function MainLayout({ children, currentPageName }) {
                 </div>
               </SidebarHeader>
 
-              <SidebarContent className="p-3" style={{ background: 'var(--secondary-bg)' }}>
+              <SidebarContent className="p-3 flex-1 overflow-y-auto" style={{ background: 'var(--secondary-bg)' }}>
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-xs font-medium uppercase tracking-wider px-3 py-2" style={{ color: 'var(--text-secondary)' }}>
                     Navegação
@@ -368,7 +368,7 @@ function MainLayout({ children, currentPageName }) {
             </Sidebar>
           )}
 
-          <main className="flex-1 flex flex-col overflow-x-hidden">
+          <main className="flex-1 flex flex-col overflow-hidden">
             {showSidebar && (
               <header className="border-b px-4 py-4 md:hidden glass-effect" style={{ borderColor: 'var(--border)' }}>
                 <div className="flex items-center gap-4">
@@ -377,7 +377,7 @@ function MainLayout({ children, currentPageName }) {
                 </div>
               </header>
             )}
-            <div className={`flex-1 overflow-auto ${showSidebar ? 'px-4 sm:px-6 md:pl-6' : ''}`} style={{ background: 'var(--primary-bg)' }}>
+            <div className={`flex-1 overflow-y-auto ${showSidebar ? 'px-4 sm:px-6 md:pl-6' : ''}`} style={{ background: 'var(--primary-bg)' }}>
               {children}
             </div>
           </main>
