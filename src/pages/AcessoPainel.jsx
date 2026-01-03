@@ -1,3 +1,9 @@
+/**
+ * PÁGINA DE LOGIN - Portão de Entrada
+ * @description Autenticação real via Base44 SDK nativo
+ * @version 2.0.0 - Arquitetura Real de Autenticação
+ */
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -5,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { authService } from '@/functions/authService'; // MUDANÇA: Nova função de autenticação
+import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/Toast';
 
 export default function AcessoPainelPage() {
@@ -20,29 +26,55 @@ export default function AcessoPainelPage() {
         setLoading(true);
 
         try {
-            // MUDANÇA CRÍTICA: Chamando authService em vez de authValidate
-            const { data: response, error } = await authService({ email, password });
+            // AUTENTICAÇÃO REAL: Usando SDK nativo da Base44
+            await base44.auth.signInWithPassword({ 
+                email: email.toLowerCase().trim(), 
+                password 
+            });
 
-            if (error || !response.success) {
-                throw new Error(response?.message || error?.message || 'Erro ao tentar fazer login.');
+            // Obter dados do usuário autenticado
+            const user = await base44.auth.me();
+
+            if (!user) {
+                throw new Error('Não foi possível obter dados do usuário.');
             }
 
-            // Armazena o token e os dados do usuário para gerenciar a sessão
-            localStorage.setItem('authToken', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
+            // Verificar status da conta (integração com Webhook Veksell)
+            if (user.account_status === 'pending_payment') {
+                throw new Error('Sua conta aguarda confirmação de pagamento. Verifique seu email.');
+            }
+
+            if (user.account_status === 'inactive') {
+                throw new Error('Sua conta está inativa. Entre em contato com o suporte.');
+            }
+
+            if (user.account_status !== 'active') {
+                throw new Error('Conta não autorizada. Verifique seu status de assinatura.');
+            }
             
             toast.success('Login realizado com sucesso!', {
-                description: 'Redirecionando para o seu dashboard...'
+                description: `Bem-vinda, ${user.full_name || user.email}!`
             });
 
             // Redireciona para o dashboard
             setTimeout(() => {
                 navigate(createPageUrl('Dashboard'));
-            }, 500);
+            }, 300);
 
         } catch (err) {
+            console.error('[LOGIN] Erro:', err);
+            
+            // Mensagens de erro amigáveis
+            let errorMessage = err.message || 'Erro ao tentar fazer login.';
+            
+            if (errorMessage.includes('Invalid login credentials')) {
+                errorMessage = 'Email ou senha incorretos.';
+            } else if (errorMessage.includes('Email not confirmed')) {
+                errorMessage = 'Confirme seu email antes de fazer login. Verifique sua caixa de entrada.';
+            }
+            
             toast.error('Falha no Login', {
-                description: err.message
+                description: errorMessage
             });
         } finally {
             setLoading(false);
