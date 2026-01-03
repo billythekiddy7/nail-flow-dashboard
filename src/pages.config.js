@@ -1,25 +1,25 @@
-import Dashboard from './pages/Dashboard';
+import AcessoPainel from './pages/AcessoPainel';
 import Agenda from './pages/Agenda';
 import Clientes from './pages/Clientes';
-import Servicos from './pages/Servicos';
-import Estoque from './pages/Estoque';
 import Configuracoes from './pages/Configuracoes';
+import Dashboard from './pages/Dashboard';
+import Estoque from './pages/Estoque';
 import Financeiro from './pages/Financeiro';
+import Servicos from './pages/Servicos';
 import obrigado from './pages/obrigado';
-import AcessoPainel from './pages/AcessoPainel';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Dashboard": Dashboard,
+    "AcessoPainel": AcessoPainel,
     "Agenda": Agenda,
     "Clientes": Clientes,
-    "Servicos": Servicos,
-    "Estoque": Estoque,
     "Configuracoes": Configuracoes,
+    "Dashboard": Dashboard,
+    "Estoque": Estoque,
     "Financeiro": Financeiro,
+    "Servicos": Servicos,
     "obrigado": obrigado,
-    "AcessoPainel": AcessoPainel,
 }
 
 export const pagesConfig = {
