@@ -228,7 +228,7 @@ function MainLayout({ children, currentPageName }) {
       <SidebarProvider>
         <div className="min-h-screen flex w-full" style={{ background: 'var(--primary-bg)' }}>
           {showSidebar && (
-            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
+            <Sidebar className="border-r sidebar-mobile md:static fixed left-0 top-0 z-50 h-full w-64 md:w-auto transform transition-transform duration-300 md:transform-none flex flex-col" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
               <SidebarHeader className="border-b p-6" style={{ borderColor: 'var(--border)', background: 'var(--secondary-bg)' }}>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -245,7 +245,7 @@ function MainLayout({ children, currentPageName }) {
                 </div>
               </SidebarHeader>
 
-              <SidebarContent className="p-3" style={{ background: 'var(--secondary-bg)' }}>
+              <SidebarContent className="p-3 flex-grow" style={{ background: 'var(--secondary-bg)' }}>
                 <SidebarGroup>
                   <SidebarGroupLabel className="text-xs font-medium uppercase tracking-wider px-3 py-2" style={{ color: 'var(--text-secondary)' }}>
                     Navegação
@@ -328,26 +328,7 @@ function MainLayout({ children, currentPageName }) {
                 <div className="space-y-3">
 
 
-                  {/* Informações do usuário */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
-                        {user?.profile_image ? (
-                          <img src={user.profile_image} alt="Avatar do usuário" className="w-full h-full object-cover" />
-                        ) : (
-                          <Heart className="w-4 h-4 text-white" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate" style={{ color: 'var(--text-primary)' }}>
-                          {user?.business_name || user?.full_name || 'Nail Designer'}
-                        </p>
-                        <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>
-                          Profissional
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+
 
                   {/* Botão de Logout */}
                   <Button
