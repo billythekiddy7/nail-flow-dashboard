@@ -31,7 +31,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress"; // Added Progress import
 import { GlobalProvider, useGlobalState } from "@/components/hooks/useGlobalState"; // Added GlobalProvider and useGlobalState imports - CORRECTED PATH
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { DashboardMetric } from "@/entities/DashboardMetric";
 import { base44 } from "@/api/base44Client"; // Added base44 import
 import { ToastProvider } from "@/components/ui/Toast";
 
@@ -73,7 +72,7 @@ function MainLayout({ children, currentPageName }) {
     setLoading(true);
     try {
       // Busca apenas as métricas do dashboard
-      const metricsData = await DashboardMetric.list('', 1);
+      const metricsData = await base44.entities.DashboardMetric.list('', 1);
       const metrics = metricsData?.[0] || {};
       const monthlyGoals = user?.monthly_goals || {}; // Use user from global state
 

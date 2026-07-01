@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useGlobalState } from "@/components/hooks/useGlobalState";
-import { DashboardMetric } from "@/entities/DashboardMetric";
+
 import {
   DollarSign, Calendar, Users, TrendingUp, Plus, Eye
 } from "lucide-react";
@@ -44,7 +43,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       // Leitura direta do warehouse de métricas - operação instantânea
-      const metricsFromWarehouse = await DashboardMetric.list();
+      const metricsFromWarehouse = await base44.entities.DashboardMetric.list();
       
       if (metricsFromWarehouse && metricsFromWarehouse.length > 0) {
         const warehouseData = metricsFromWarehouse[0];
@@ -74,7 +73,7 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error("Erro ao buscar métricas pré-calculadas:", error);
-      toast.error("Falha ao carregar dados", { description: "Não foi possível buscar os indicadores do dashboard." });
+      console.error("Falha ao carregar métricas do dashboard:", error);
     } finally {
       setLoading(false);
     }
