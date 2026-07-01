@@ -46,14 +46,7 @@ export default function ClientCard({ client, onEdit, onDelete, onView }) {
         </button>
         
         <button
-          onClick={() => {
-            console.log('🔥 BOTÃO DELETE CLICADO PARA:', client.name);
-            if (onDelete) {
-              onDelete(client);
-            } else {
-              console.error('onDelete não encontrado');
-            }
-          }}
+          onClick={() => onDelete && onDelete(client)}
           className="w-8 h-8 rounded-full flex items-center justify-center bg-red-500 text-white hover:bg-red-600 transition-colors"
           title="Excluir"
         >

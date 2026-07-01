@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect, useCallback } from "react";
-import { useTheme } from "@/components/ThemeProvider";
 import {
   DollarSign,
   TrendingUp,
@@ -31,7 +29,6 @@ import { Client, Service } from "@/entities/all";
 import { useDateRange } from "@/components/hooks/useDateRange";
 
 export default function Financeiro() {
-  const { isDark } = useTheme();
   const [showNewAttendanceModal, setShowNewAttendanceModal] = useState(false);
   const [showGoalsModal, setShowGoalsModal] = useState(false);
   const { toast } = useToast();
@@ -50,9 +47,7 @@ export default function Financeiro() {
   useEffect(() => {
     const fetchLookupData = async () => {
       try {
-        console.log("[Financeiro] Buscando clientes...");
         const clientsList = await Client.list('-created_date', 500);
-        console.log("[Financeiro] Buscando serviços...");
         const servicesList = await Service.list();
         
         setLookupData({
@@ -75,11 +70,6 @@ export default function Financeiro() {
     setError(null);
     
     try {
-      // AÇÃO 3: Correção da Lógica de Busca usando o estado dinâmico.
-      console.log(`[FRONTEND FETCH] Enviando para o backend:`, { 
-        startDate: dateRange.startDate.toISOString(), 
-        endDate: dateRange.endDate.toISOString() 
-      });
 
       const { data, error: fetchError } = await getFinancialSummary({
         startDate: dateRange.startDate.toISOString(),
@@ -188,9 +178,26 @@ export default function Financeiro() {
               <Plus className="w-4 h-4 mr-2" />
               Registrar Atendimento
             </Button>
-            <Button variant="outline" className="glass-effect flex-1 sm:flex-none">
+            <Button 
+              variant="outline" 
+              className="glass-effect flex-1 sm:flex-none"
+              onClick={() => {
+                const rows = [['Data','Cliente','Serviço','Valor','Método']];
+                payments.forEach(p => {
+                  const client = lookupData.clients.find(c => c.id === p.client_id);
+                  const service = lookupData.services.find(s => s.id === p.service_id);
+                  rows.push([p.date || '', client?.name || '', service?.name || '', p.amount || '', p.method || '']);
+                });
+                const csv = rows.map(r => r.join(',')).join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'financeiro.csv'; a.click();
+                URL.revokeObjectURL(url);
+              }}
+            >
               <Download className="w-4 h-4 mr-2" />
-              Exportar
+              Exportar CSV
             </Button>
           </div>
         </div>

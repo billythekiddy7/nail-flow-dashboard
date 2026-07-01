@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,8 @@ import { CalendarIcon, Clock, User, Scissors } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Appointment, Client, Service, Product } from "@/entities/all";
+import { base44 } from "@/api/base44Client";
+import { useToast } from "@/components/ui/Toast";
 
 export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
   const [step, setStep] = useState(1);
@@ -27,6 +28,7 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
   const [services, setServices] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
@@ -62,9 +64,8 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
     selectedService.products_used.forEach((usedProduct) => {
       const productDetails = products.find((p) => p.id === usedProduct.product_id);
       if (productDetails) {
-        // Usar a quantidade definida no serviço, ou 1 como padrão
         const quantity = usedProduct.quantity || 1;
-        totalCost += (productDetails.cost || 0) * quantity;
+        totalCost += (productDetails.cost_unit || 0) * quantity;
       }
     });
 
@@ -77,7 +78,7 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
 
   const handleSubmit = async () => {
     if (!formData.client_id || !formData.service_id || !formData.date || !formData.time) {
-      alert("Por favor, preencha todos os campos obrigatórios");
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
 
@@ -107,13 +108,19 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
         payment_method: formData.payment_method
       };
 
-      await Appointment.create(appointmentData);
+      const createdAppointment = await Appointment.create(appointmentData);
+      try {
+        await base44.functions.invoke('onAppointmentCreated', { appointmentId: createdAppointment.id });
+      } catch (triggerError) {
+        console.warn('Trigger onAppointmentCreated falhou (best-effort):', triggerError);
+      }
+      toast.success("Agendamento criado com sucesso!");
       onSuccess?.();
       onClose();
       resetForm();
     } catch (error) {
       console.error("Erro ao criar agendamento:", error);
-      alert("Erro ao criar agendamento. Tente novamente.");
+      toast.error("Erro ao criar agendamento. Tente novamente.");
     }
     setLoading(false);
   };
@@ -132,11 +139,11 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
 
   const nextStep = () => {
     if (step === 1 && (!formData.client_id || !formData.service_id)) {
-      alert("Selecione cliente e serviço");
+      toast.error("Selecione cliente e serviço");
       return;
     }
     if (step === 2 && (!formData.date || !formData.time)) {
-      alert("Selecione data e horário");
+      toast.error("Selecione data e horário");
       return;
     }
     setStep(step + 1);
@@ -296,8 +303,8 @@ export default function NovoAgendamento({ isOpen, onClose, onSuccess }) {
                     <SelectContent>
                       <SelectItem value="dinheiro">Dinheiro</SelectItem>
                       <SelectItem value="pix">PIX</SelectItem>
-                      <SelectItem value="cartao">Cartão</SelectItem>
-                      <SelectItem value="a_vista">À Vista</SelectItem>
+                      <SelectItem value="debit">Cartão Débito</SelectItem>
+                      <SelectItem value="credit">Cartão Crédito</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

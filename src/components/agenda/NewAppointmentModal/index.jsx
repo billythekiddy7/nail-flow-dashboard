@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -45,12 +44,10 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
 
   const loadData = async () => {
     try {
-      const [clientsData, servicesData] = await Promise.all([
-        Client.list('-created_date', 50),
-        Service.list('-created_date', 30)
-      ]);
-      setClients(clientsData);
-      setServices(servicesData);
+      const clientsData = await Client.list('-created_date', 100);
+      const servicesData = await Service.list('-created_date', 50);
+      setClients(clientsData || []);
+      setServices(servicesData || []);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
     }
@@ -130,9 +127,9 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
         service_id: formData.service_id,
         start_time: startDateTime.toISOString(),
         end_time: endDateTime.toISOString(),
-        status: formData.payment_method === 'fiado' ? 'agendado' : 'confirmado',
+        status: 'agendado',
         final_price: finalPrice,
-        profit: finalPrice * 0.7, // Cálculo simplificado
+        profit: finalPrice,
         notes: formData.notes,
         payment_method: formData.payment_method
       };
@@ -149,14 +146,10 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
         // Não bloquear o fluxo principal - trigger é best-effort
       }
       
-      // Toast de sucesso (usando alert como fallback)
-      alert('Agendamento criado com sucesso!');
-      
       onSuccess?.();
       onClose();
     } catch (error) {
       console.error('Erro ao criar agendamento:', error);
-      alert('Erro ao criar agendamento. Tente novamente.');
     }
     setLoading(false);
   };

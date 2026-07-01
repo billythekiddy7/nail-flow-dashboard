@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
 import { Service } from '@/entities/Service';
-import { Appointment } from '@/entities/Appointment';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Scissors, Edit, Trash2 } from 'lucide-react';
@@ -31,9 +29,16 @@ export default function Servicos() {
 
   const loadServices = async () => {
     setLoading(true);
-    const servicesData = await Service.list('-created_date');
-    setServices(servicesData);
-    setLoading(false);
+    try {
+      const servicesData = await Service.list('-created_date');
+      setServices(servicesData || []);
+    } catch (error) {
+      console.error('Erro ao carregar serviços:', error);
+      toast.error('Erro ao carregar serviços.');
+      setServices([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFormSubmit = async (e) => {
@@ -67,7 +72,7 @@ export default function Servicos() {
 
   const handleEdit = (service) => {
     setEditingService(service);
-    setIsFormOpen(true);
+    setIsNewServiceModalOpen(true);
   };
 
   const handleDelete = async (service) => {
@@ -174,7 +179,7 @@ export default function Servicos() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p className="font-bold text-xl gradient-text">R$ {service.price.toFixed(2)}</p>
+                <p className="font-bold text-xl gradient-text">R$ {(service.price || 0).toFixed(2)}</p>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Duração: {service.duration} min</p>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{service.description}</p>
                 {service.slug &&

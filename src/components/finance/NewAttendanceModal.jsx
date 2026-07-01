@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -48,12 +47,8 @@ export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
 
   const loadData = async () => {
     try {
-      // Busca sequencial para reduzir carga no servidor
-      console.log("[NewAttendanceModal] Buscando clientes...");
       const clientsData = await Client.list('-created_date', 50);
-      console.log("[NewAttendanceModal] Buscando serviços...");
       const servicesData = await Service.list('-created_date', 30);
-      console.log("[NewAttendanceModal] Buscando produtos...");
       const productsData = await Product.list('-created_date', 100);
       
       setClients(clientsData);
@@ -137,7 +132,7 @@ export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
   const calculateTotalCost = () => {
     return formData.products_used.reduce((total, usedProduct) => {
       const product = products.find(p => p.id === usedProduct.product_id);
-      return total + ((product?.cost || 0) * usedProduct.qty);
+      return total + ((product?.cost_unit || 0) * usedProduct.qty);
     }, 0);
   };
 

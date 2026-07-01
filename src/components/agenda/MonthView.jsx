@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, isSameDay } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, isSameMonth, isToday, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import DayModal from './DayModal';
 
@@ -14,14 +13,13 @@ export default function MonthView({ selectedDate, appointments, clients, service
 
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
-  const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+  const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 0 });
+  const monthDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
 
   const handleDayClick = (date) => {
     setSelectedDayDate(date);
     setShowDayModal(true);
-    
-    // Adicionar console.log conforme sugerido na auditoria
-    console.log('Day clicked:', format(date, 'yyyy-MM-dd'));
     
     if (onDateSelect) {
       onDateSelect(date);

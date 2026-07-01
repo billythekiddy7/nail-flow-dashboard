@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect, useMemo } from "react";
-import { useTheme } from "@/components/ThemeProvider";
-import { Appointment, Client, Service } from "@/entities/all";
+import { Client, Service } from "@/entities/all";
 import { Calendar, Clock, Plus, Filter, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +20,6 @@ import { useAppointments } from "@/components/agenda/AppointmentHook";
 import { getDateRange, formatDateForDisplay } from "@/components/agenda/DateUtils";
 
 export default function Agenda() {
-  const { isDark } = useTheme();
   const [clients, setClients] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -57,18 +54,13 @@ export default function Agenda() {
 
   const loadData = async () => {
     try {
-      // Carregar dados em sequência para evitar rate limit
-      const [clientsData, servicesData] = await Promise.all([
-        Client.list('-created_date', 30), // Reduzir limite
-        Service.list('-created_date', 20)  // Reduzir limite
-      ]);
-      
-      setClients(clientsData);
-      setServices(servicesData);
+      const clientsData = await Client.list('-created_date', 100);
+      const servicesData = await Service.list('-created_date', 50);
+      setClients(clientsData || []);
+      setServices(servicesData || []);
       setDataLoaded(true);
     } catch (error) {
       console.error("Erro ao carregar dados da agenda:", error);
-      // Em caso de erro, marcar como carregado para evitar loop
       setDataLoaded(true);
     }
   };
@@ -125,8 +117,6 @@ export default function Agenda() {
 
   const handleNewAppointmentSuccess = () => {
     setShowNewAppointmentModal(false);
-    // Recarregar dados se necessário
-    loadData();
   };
 
   const handleFiltersApply = (newFilters) => {

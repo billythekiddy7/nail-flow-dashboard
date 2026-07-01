@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { Save } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import GradientButton from '@/components/ui/GradientButton';
 import { useUserSettings } from '@/components/hooks/useUserSettings';
-import { useTheme } from '@/components/ThemeProvider';
 
 // Componentes otimizados
 import BusinessProfileCard from '@/components/config/BusinessProfileCard';
@@ -16,7 +14,6 @@ import PasswordCard from '@/components/config/PasswordCard';
 
 export default function Configuracoes() {
   const { userData, loading, saving, updateUserData } = useUserSettings();
-  const { toggleTheme } = useTheme();
   const [formData, setFormData] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -36,11 +33,6 @@ export default function Configuracoes() {
     const success = await updateUserData(formData);
     if (success) {
       setHasChanges(false);
-      
-      // Se o tema mudou, aplicar imediatamente
-      if (formData.theme !== userData?.theme) {
-        toggleTheme();
-      }
     }
   };
 
