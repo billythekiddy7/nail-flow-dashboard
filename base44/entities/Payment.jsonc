@@ -1,0 +1,62 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "description": "ID da cliente"
+    },
+    "appointment_id": {
+      "type": "string",
+      "description": "ID do agendamento relacionado"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Valor do pagamento"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "dinheiro",
+        "pix",
+        "debit",
+        "credit"
+      ],
+      "description": "M\u00e9todo de pagamento"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do pagamento"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es sobre o pagamento"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pendente",
+        "confirmado",
+        "cancelado"
+      ],
+      "default": "confirmado",
+      "description": "Status do pagamento"
+    }
+  },
+  "required": [
+    "client_id",
+    "appointment_id",
+    "amount",
+    "method",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

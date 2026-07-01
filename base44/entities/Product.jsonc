@@ -1,0 +1,50 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome do produto"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Custo unit\u00e1rio do produto"
+    },
+    "cost_total": {
+      "type": "number",
+      "description": "Custo total pago na compra"
+    },
+    "cost_unit": {
+      "type": "number",
+      "description": "Custo unit\u00e1rio calculado automaticamente"
+    },
+    "stock": {
+      "type": "number",
+      "description": "Quantidade em estoque"
+    },
+    "min_stock": {
+      "type": "number",
+      "description": "Estoque m\u00ednimo para alerta"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unidade de medida (ml, g, unidade)"
+    }
+  },
+  "required": [
+    "name",
+    "cost_total",
+    "cost_unit",
+    "stock",
+    "min_stock",
+    "unit"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

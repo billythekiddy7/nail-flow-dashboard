@@ -1,0 +1,40 @@
+{
+  "name": "DashboardMetric",
+  "type": "object",
+  "properties": {
+    "revenueTotal": {
+      "type": "number",
+      "default": 0,
+      "description": "Faturamento total do per\u00edodo de refer\u00eancia (m\u00eas atual)."
+    },
+    "netProfit": {
+      "type": "number",
+      "default": 0,
+      "description": "Lucro l\u00edquido do per\u00edodo de refer\u00eancia (m\u00eas atual)."
+    },
+    "newClientsCount": {
+      "type": "number",
+      "default": 0,
+      "description": "N\u00famero de novos clientes no per\u00edodo de refer\u00eancia (m\u00eas atual)."
+    },
+    "todayAppointmentsCount": {
+      "type": "number",
+      "default": 0,
+      "description": "N\u00famero de agendamentos (qualquer status) para o dia de hoje."
+    },
+    "completedAppointmentsCount": {
+      "type": "number",
+      "default": 0,
+      "description": "N\u00famero de agendamentos conclu\u00eddos no m\u00eas atual."
+    }
+  },
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  },
+  "required": []
+}

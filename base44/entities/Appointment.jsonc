@@ -1,0 +1,86 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "description": "ID da cliente"
+    },
+    "service_id": {
+      "type": "string",
+      "description": "ID do servi\u00e7o"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Hor\u00e1rio de in\u00edcio"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Hor\u00e1rio de t\u00e9rmino"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "agendado",
+        "confirmado",
+        "concluido",
+        "cancelado"
+      ],
+      "default": "agendado",
+      "description": "Status do agendamento"
+    },
+    "final_price": {
+      "type": "number",
+      "description": "Pre\u00e7o final cobrado"
+    },
+    "profit": {
+      "type": "number",
+      "description": "Lucro calculado"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es do agendamento"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "dinheiro",
+        "pix",
+        "cartao",
+        "a_vista"
+      ],
+      "description": "Forma de pagamento"
+    },
+    "products_used": {
+      "type": "array",
+      "description": "Produtos utilizados no atendimento",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "client_id",
+    "service_id",
+    "start_time",
+    "end_time"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

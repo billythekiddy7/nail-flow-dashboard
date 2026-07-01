@@ -1,0 +1,50 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "Nome do neg\u00f3cio/marca"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Biografia profissional"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone profissional"
+    },
+    "instagram": {
+      "type": "string",
+      "description": "Link do Instagram"
+    },
+    "profile_image": {
+      "type": "string",
+      "description": "URL da foto de perfil"
+    },
+    "account_status": {
+      "type": "string",
+      "default": "active",
+      "description": "Status da conta do usu\u00e1rio"
+    },
+    "monthly_goals": {
+      "type": "object",
+      "properties": {
+        "revenue_target": {
+          "type": "number"
+        },
+        "profit_target": {
+          "type": "number"
+        },
+        "clients_target": {
+          "type": "number"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "required": []
+}

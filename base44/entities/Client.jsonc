@@ -1,0 +1,49 @@
+{
+  "name": "Client",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome completo da cliente"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone/WhatsApp da cliente"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email da cliente"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anota\u00e7\u00f5es privadas sobre a cliente"
+    },
+    "loyalty_points": {
+      "type": "number",
+      "default": 0,
+      "description": "Pontos no programa de fidelidade"
+    },
+    "total_spent": {
+      "type": "number",
+      "default": 0,
+      "description": "Total gasto pela cliente"
+    },
+    "last_visit": {
+      "type": "string",
+      "format": "date",
+      "description": "Data da \u00faltima visita"
+    }
+  },
+  "required": [
+    "name",
+    "phone"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "write": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
