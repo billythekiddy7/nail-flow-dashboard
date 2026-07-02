@@ -13,10 +13,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, X, Plus, Minus, User, Scissors, Package, DollarSign, CreditCard } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Appointment, Client, Service, Product, Payment } from '@/entities/all';
 import { useToast } from '@/components/ui/Toast';
 import GradientButton from '@/components/ui/GradientButton';
-import { createCompleteAttendance } from '@/functions/createCompleteAttendance'; // Importar nova função
+import { base44 } from '@/api/base44Client';
 
 export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -47,9 +46,9 @@ export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
 
   const loadData = async () => {
     try {
-      const clientsData = await Client.list('-created_date', 50);
-      const servicesData = await Service.list('-created_date', 30);
-      const productsData = await Product.list('-created_date', 100);
+      const clientsData = await base44.entities.Client.list('-created_date', 50);
+      const servicesData = await base44.entities.Service.list('-created_date', 30);
+      const productsData = await base44.entities.Product.list('-created_date', 100);
       
       setClients(clientsData);
       setServices(servicesData);
@@ -163,8 +162,8 @@ export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
       const finalPrice = formData.final_price || selectedService?.price || 0;
       const realProfit = finalPrice - totalCost;
 
-      // 1. Montar payload para a função de backend
-      const appointmentData = {
+      // 1. Criar agendamento
+      const appointment = await base44.entities.Appointment.create({
         client_id: formData.client_id,
         service_id: formData.service_id,
         start_time: startDateTime.toISOString(),
@@ -175,30 +174,29 @@ export default function NewAttendanceModal({ isOpen, onClose, onSuccess }) {
         notes: formData.notes,
         payment_method: formData.payment_method,
         products_used: formData.products_used
-      };
+      });
 
-      const paymentData = {
+      // 2. Criar pagamento vinculado
+      await base44.entities.Payment.create({
         client_id: formData.client_id,
-        // appointment_id will be set by the backend function after appointment creation
+        appointment_id: appointment.id,
         amount: finalPrice,
         method: formData.payment_method,
-        date: formData.date.toISOString().split('T')[0],
+        date: format(formData.date, 'yyyy-MM-dd'),
         status: 'confirmado'
-      };
-      
-      const payload = {
-          appointmentData,
-          paymentData,
-          productsUsed: formData.products_used
-      };
+      });
 
-      // 2. Chamar a função de backend transacional
-      const { data, error } = await createCompleteAttendance(payload);
-
-      if (error) {
-        throw new Error(error.response?.data?.details || 'A resposta do servidor indicou um erro.');
+      // 3. Descontar estoque dos produtos utilizados (best-effort)
+      for (const used of formData.products_used) {
+        if (!used.product_id || !used.qty) continue;
+        const prod = products.find(p => p.id === used.product_id);
+        if (prod) {
+          await base44.entities.Product.update(used.product_id, {
+            stock: Math.max(0, (prod.stock || 0) - used.qty)
+          });
+        }
       }
-      
+
       toast.success('Atendimento registrado com sucesso!', {
         description: `Lucro: R$ ${realProfit.toFixed(2)}`
       });

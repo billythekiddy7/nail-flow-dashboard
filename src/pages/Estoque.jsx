@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Product } from '@/entities/Product';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Package, Edit, Trash2, Box, Calculator, DollarSign, TrendingUp } from 'lucide-react';
+import { Package, Box, Calculator, DollarSign, TrendingUp } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import NewProductModal from '@/components/inventory/NewProductModal';
 import ProductCard from '@/components/inventory/ProductCard';
 import MetricsCard from '@/components/ui/metrics-card';
-import { getInventoryMetrics } from '@/functions/getInventoryMetrics'; // Importa a função do backend
 import { useConfirm } from '@/components/hooks/useConfirm';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useToast } from '@/components/ui/Toast';
+import { base44 } from '@/api/base44Client';
 
 const formatCurrency = (value) => `R$ ${value?.toFixed(2).replace('.', ',') || '0,00'}`;
 
@@ -29,22 +27,19 @@ export default function Estoque() {
     setLoading(true);
     setMetricsLoading(true);
     try {
-      // Busca sequencial para reduzir carga no servidor (Regra 4.1)
-      console.log("[Estoque] Buscando produtos...");
-      const productsData = await Product.list('-created_date');
-      console.log("[Estoque] Buscando métricas do backend...");
-      const metricsResponse = await getInventoryMetrics();
-      
-      setProducts(productsData);
-      setMetrics(metricsResponse.data);
+      const productsData = await base44.entities.Product.list('-created_date');
+      setProducts(productsData || []);
 
+      // Calcular métricas localmente (sem função backend)
+      const totalUnits = productsData.reduce((acc, p) => acc + (p.stock || 0), 0);
+      const totalCost = productsData.reduce((acc, p) => acc + ((p.cost_unit || 0) * (p.stock || 0)), 0);
+      setMetrics({ totalUnits, totalCost, totalValueReceived: 0, totalProfit: 0 });
     } catch (error) {
-        console.error("Erro ao carregar dados do estoque:", error);
-        toast.error("Falha ao carregar dados do estoque.");
-        setMetrics(null); // Reseta as métricas em caso de erro
+      console.error("Erro ao carregar dados do estoque:", error);
+      setMetrics(null);
     } finally {
-        setLoading(false);
-        setMetricsLoading(false);
+      setLoading(false);
+      setMetricsLoading(false);
     }
   };
   
@@ -67,7 +62,7 @@ export default function Estoque() {
 
     if (confirmed) {
       try {
-        await Product.delete(product.id);
+        await base44.entities.Product.delete(product.id);
         toast.success(`Produto "${product.name}" excluído com sucesso!`);
         await loadAllData(); // Recarrega produtos e métricas
       } catch (error) {

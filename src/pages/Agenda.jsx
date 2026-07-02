@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Client, Service } from "@/entities/all";
+import { base44 } from "@/api/base44Client";
 import { Calendar, Clock, Plus, Filter, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -54,8 +54,8 @@ export default function Agenda() {
 
   const loadData = async () => {
     try {
-      const clientsData = await Client.list('-created_date', 100);
-      const servicesData = await Service.list('-created_date', 50);
+      const clientsData = await base44.entities.Client.list('-created_date', 100);
+      const servicesData = await base44.entities.Service.list('-created_date', 50);
       setClients(clientsData || []);
       setServices(servicesData || []);
       setDataLoaded(true);

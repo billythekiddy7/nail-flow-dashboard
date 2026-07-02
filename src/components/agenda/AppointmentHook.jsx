@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Appointment } from '@/entities/Appointment';
+import { base44 } from '@/api/base44Client';
 
 /**
  * @description (v3 - Otimizado) Busca agendamentos utilizando filtragem por data no servidor.
@@ -34,7 +34,7 @@ export function useAppointments(dateRange) {
         };
         
         // Executa a busca otimizada com filtro no servidor
-        const filteredAppointments = await Appointment.filter(filterOptions, '-start_time', 200);
+        const filteredAppointments = await base44.entities.Appointment.filter(filterOptions, '-start_time', 200);
 
         if (isMounted) {
           setAppointments(filteredAppointments || []);

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,10 +19,9 @@ import {
 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Appointment } from '@/entities/Appointment';
 import GradientButton from '../ui/GradientButton';
 import PaymentModal from './PaymentModal';
-import { getClientSummary } from '@/functions/getClientSummary'; // Import da nova função de backend
+import { base44 } from '@/api/base44Client';
 
 export default function ClientDetailsModal({ isOpen, onClose, client, services = [], onNewAppointment }) {
   const [clientAppointments, setClientAppointments] = useState([]);
@@ -40,7 +38,6 @@ export default function ClientDetailsModal({ isOpen, onClose, client, services =
     }
   }, [isOpen, client]);
 
-  // Função refatorada para usar o backend
   const loadClientData = async () => {
     if (!client) return;
 
@@ -49,32 +46,23 @@ export default function ClientDetailsModal({ isOpen, onClose, client, services =
     setClientAppointments([]);
 
     try {
-      console.log('📡 Carregando resumo do cliente via backend:', client.name);
+      const appointments = await base44.entities.Appointment.filter(
+        { client_id: client.id },
+        '-start_time',
+        100
+      );
 
-      // ÚNICA CHAMADA PARA O BACKEND OTIMIZADO
-      const result = await getClientSummary({ clientId: client.id });
+      setClientAppointments(appointments || []);
 
-      if (result.error || !result.data) {
-        throw new Error(result.error?.message || "Erro ao buscar resumo do cliente.");
-      }
+      const completed = (appointments || []).filter(a => a.status === 'concluido');
+      const totalPaidValue = completed.reduce((sum, a) => sum + (a.final_price || 0), 0);
+      const totalAppointments = appointments?.length || 0;
+      const averageTicket = completed.length > 0 ? totalPaidValue / completed.length : 0;
 
-      // O backend agora retorna tanto o resumo quanto os agendamentos
-      setSummary(result.data.summary);
-      setClientAppointments(result.data.appointments || []);
-
-      console.log('✅ Resumo do cliente carregado:', result.data.summary);
-      console.log('✅ Histórico de agendamentos carregado:', (result.data.appointments || []).length);
-
+      setSummary({ totalAppointments, totalPaidValue, averageTicket, pendingBalance: 0 });
     } catch (error) {
-      console.error('❌ Erro ao carregar dados do cliente:', error);
-      // Define um estado de erro ou padrão para a UI
-      setSummary({
-        totalAppointments: 0,
-        totalPaidValue: 0,
-        averageTicket: 0,
-        pendingBalance: 0
-      });
-      // Optionally, set clientAppointments to empty or show a message
+      console.error('Erro ao carregar dados do cliente:', error);
+      setSummary({ totalAppointments: 0, totalPaidValue: 0, averageTicket: 0, pendingBalance: 0 });
       setClientAppointments([]);
     }
     setLoading(false);

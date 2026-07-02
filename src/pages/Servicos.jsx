@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Service } from '@/entities/Service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Scissors, Edit, Trash2 } from 'lucide-react';
@@ -12,7 +11,7 @@ import NewServiceModal from '@/components/services/NewServiceModal/index';
 import { useToast } from '@/components/ui/Toast';
 import { useConfirm } from '@/components/hooks/useConfirm';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { deleteService } from '@/functions/deleteService'; // Importa a nova função
+import { base44 } from '@/api/base44Client';
 
 export default function Servicos() {
   const [services, setServices] = useState([]);
@@ -30,7 +29,7 @@ export default function Servicos() {
   const loadServices = async () => {
     setLoading(true);
     try {
-      const servicesData = await Service.list('-created_date');
+      const servicesData = await base44.entities.Service.list('-created_date');
       setServices(servicesData || []);
     } catch (error) {
       console.error('Erro ao carregar serviços:', error);
@@ -54,10 +53,10 @@ export default function Servicos() {
 
     try {
       if (editingService) {
-        await Service.update(editingService.id, data);
+        await base44.entities.Service.update(editingService.id, data);
         toast.success('Serviço atualizado com sucesso!');
       } else {
-        await Service.create(data);
+        await base44.entities.Service.create(data);
         toast.success('Serviço cadastrado com sucesso!');
       }
 
@@ -87,16 +86,12 @@ export default function Servicos() {
     if (!confirmed) return;
 
     try {
-      // ANiquilação da lógica antiga, implementação da chamada ao backend
-      const response = await deleteService({ serviceId: service.id });
-      
-      toast.success(response.data.message || 'Serviço excluído com sucesso!');
+      await base44.entities.Service.delete(service.id);
+      toast.success('Serviço excluído com sucesso!');
       loadServices();
     } catch (error) {
       console.error("Falha ao excluir serviço:", error);
-      // Extrai a mensagem de erro específica do backend (ex: 409 Conflict)
-      const errorMessage = error.response?.data?.error || 'Ocorreu um erro ao tentar excluir o serviço.';
-      toast.error(errorMessage);
+      toast.error('Ocorreu um erro ao tentar excluir o serviço.');
     }
   };
 

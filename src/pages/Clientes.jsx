@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from 'react';
-import { Client, Service } from '@/entities/all';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, User } from 'lucide-react';
@@ -35,7 +33,7 @@ export default function Clientes() {
     const loadNonFilteredData = async () => {
       try {
         console.log('📡 Carregando serviços...');
-        const servicesData = await Service.list('-created_date', 20);
+        const servicesData = await base44.entities.Service.list('-created_date', 20);
         setServices(Array.isArray(servicesData) ? servicesData : []);
         console.log('✅ Serviços carregados:', servicesData.length);
       } catch (error) {
@@ -52,7 +50,7 @@ export default function Clientes() {
     try {
       const filterOptions = searchTerm ? { name_contains: searchTerm } : {};
       console.log('📡 Recarregando clientes com filtro:', filterOptions);
-      const clientsData = await Client.filter(filterOptions, '-created_date', 50);
+      const clientsData = await base44.entities.Client.filter(filterOptions, '-created_date', 50);
       setClients(clientsData || []);
     } catch (error) {
       console.error('❌ Erro ao recarregar clientes:', error);
@@ -73,7 +71,7 @@ export default function Clientes() {
         : {};
 
         console.log('📡 Buscando clientes com filtro:', filterOptions);
-        const clientsData = await Client.filter(filterOptions, '-created_date', 50);
+        const clientsData = await base44.entities.Client.filter(filterOptions, '-created_date', 50);
         setClients(clientsData || []);
       } catch (error) {
         console.error('❌ Erro ao buscar clientes:', error);
@@ -96,10 +94,10 @@ export default function Clientes() {
 
     try {
       if (editingClient) {
-        await Client.update(editingClient.id, data);
+        await base44.entities.Client.update(editingClient.id, data);
         toast.success('Cliente atualizada com sucesso!');
       } else {
-        const newClient = await Client.create(data);
+        const newClient = await base44.entities.Client.create(data);
         toast.success('Cliente cadastrada com sucesso!');
         
         // OPERAÇÃO CRONOS: Disparar trigger de atualização incremental
@@ -137,7 +135,7 @@ export default function Clientes() {
     if (!deleteClient) return;
 
     try {
-      await Client.delete(deleteClient.id);
+      await base44.entities.Client.delete(deleteClient.id);
       toast.success(`Cliente "${deleteClient.name}" excluída com sucesso!`);
       setShowDeleteModal(false);
       setDeleteClient(null);

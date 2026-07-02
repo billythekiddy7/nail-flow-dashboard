@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
-import { Client, Service, Appointment } from '@/entities/all';
 import { base44 } from '@/api/base44Client';
 import StepClient from './StepClient';
 import StepDateTime from './StepDateTime';
@@ -44,8 +43,8 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
 
   const loadData = async () => {
     try {
-      const clientsData = await Client.list('-created_date', 100);
-      const servicesData = await Service.list('-created_date', 50);
+      const clientsData = await base44.entities.Client.list('-created_date', 100);
+      const servicesData = await base44.entities.Service.list('-created_date', 50);
       setClients(clientsData || []);
       setServices(servicesData || []);
     } catch (error) {
@@ -134,7 +133,7 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
         payment_method: formData.payment_method
       };
 
-      const createdAppointment = await Appointment.create(appointmentData);
+      const createdAppointment = await base44.entities.Appointment.create(appointmentData);
       
       // OPERAÇÃO CRONOS: Disparar trigger de atualização incremental
       try {
