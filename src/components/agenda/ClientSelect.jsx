@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Search, Plus, User } from 'lucide-react';
-import { Client } from '@/entities/Client';
+import { base44 } from '@/api/base44Client';
 
 export default function ClientSelect({ value, onChange, clients: initialClients, onClientsUpdate }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,7 +54,7 @@ export default function ClientSelect({ value, onChange, clients: initialClients,
     };
 
     try {
-      const newClient = await Client.create(clientData);
+      const newClient = await base44.entities.Client.create(clientData);
       const updatedClients = [...clients, newClient];
       setClients(updatedClients);
       onClientsUpdate?.(updatedClients);

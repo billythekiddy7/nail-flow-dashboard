@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, DollarSign, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Payment, Appointment } from '@/entities/all';
+import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/Toast';
 import GradientButton from '@/components/ui/GradientButton';
 
@@ -44,7 +44,7 @@ export default function PaymentModal({ isOpen, onClose, client, onSuccess }) {
         status: 'confirmado'
       };
 
-      const payment = await Payment.create(paymentData);
+      const payment = await base44.entities.Payment.create(paymentData);
 
       // Criar um agendamento marcado como concluído para registrar o serviço
       const appointmentData = {
@@ -59,7 +59,7 @@ export default function PaymentModal({ isOpen, onClose, client, onSuccess }) {
         payment_method: formData.payment_method
       };
 
-      await Appointment.create(appointmentData);
+      await base44.entities.Appointment.create(appointmentData);
 
       toast.success('Pagamento registrado com sucesso!');
       onSuccess?.();

@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Check, XCircle, RotateCcw, Clock, User, Scissors } from 'lucide-react';
-import { Appointment, Client, Service } from '@/entities/all';
+import { base44 } from '@/api/base44Client';
 import { useToast } from '@/components/ui/Toast';
 
 export default function DayModal({ date, isOpen, onClose, clients = [], services = [] }) {
@@ -26,7 +26,7 @@ export default function DayModal({ date, isOpen, onClose, clients = [], services
     
     setLoading(true);
     try {
-      const allAppointments = await Appointment.list('-start_time', 100);
+      const allAppointments = await base44.entities.Appointment.list('-start_time', 100);
       const dayAppointments = allAppointments.filter(apt => {
         const aptDate = new Date(apt.start_time);
         return aptDate.toDateString() === date.toDateString();
@@ -41,7 +41,7 @@ export default function DayModal({ date, isOpen, onClose, clients = [], services
 
   const handleStatusChange = async (appointment, newStatus) => {
     try {
-      await Appointment.update(appointment.id, { status: newStatus });
+      await base44.entities.Appointment.update(appointment.id, { status: newStatus });
       
       // Atualizar localmente
       setAppointments(prev => 
