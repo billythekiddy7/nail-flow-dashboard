@@ -25,7 +25,14 @@
     "account_status": {
       "type": "string",
       "default": "active",
-      "description": "Status da conta do usu\u00e1rio"
+      "description": "Status da conta do usu\u00e1rio (controlado pelo sistema de assinatura)",
+      "rls": {
+        "update": {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      }
     },
     "monthly_goals": {
       "type": "object",

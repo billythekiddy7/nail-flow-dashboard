@@ -128,7 +128,6 @@ export default function NewAppointmentModal({ isOpen, onClose, onSuccess, initia
         end_time: endDateTime.toISOString(),
         status: 'agendado',
         final_price: finalPrice,
-        profit: finalPrice,
         notes: formData.notes,
         payment_method: formData.payment_method
       };

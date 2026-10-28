@@ -57,32 +57,25 @@ export default function PasswordCard() {
     setLoading(true);
     
     try {
-      // ANTES: await new Promise(resolve => setTimeout(resolve, 1000));
-      // DEPOIS: Chamada real à função de backend
-      const { data, error } = await base44.functions.invoke('updateUserPassword', {
+      const currentUser = await base44.auth.me();
+
+      await base44.auth.changePassword({
+        userId: currentUser.id,
         currentPassword: passwords.current,
         newPassword: passwords.new
       });
 
-      if (error) {
-        throw new Error(error.response?.data?.message || 'Erro ao atualizar senha');
-      }
-
-      if (!data.success) {
-        throw new Error(data.message || 'Erro ao atualizar senha');
-      }
-      
       toast.success('Senha atualizada com sucesso!', {
         description: 'Sua senha foi alterada. Use-a no próximo login.'
       });
-      
+
       // Limpar os campos após sucesso
       setPasswords({ current: '', new: '', confirm: '' });
-      
+
     } catch (error) {
       console.error('Erro ao alterar senha:', error);
-      toast.error('Erro ao alterar senha', {
-        description: error.message || 'Verifique se a senha atual está correta e tente novamente.'
+      toast.error('Não foi possível alterar a senha', {
+        description: 'Verifique se a senha atual está correta e tente novamente.'
       });
     } finally {
       setLoading(false);

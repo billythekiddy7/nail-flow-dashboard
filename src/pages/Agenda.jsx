@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { format, addDays, startOfWeek, isSameDay, isToday } from "date-fns";
+import { format, addDays, addMonths, startOfWeek, isSameDay, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 // Importar componentes
@@ -108,11 +108,13 @@ export default function Agenda() {
     return filtered;
   }, [appointments, clients, services, searchTerm, filters]);
 
-  // Navegação de datas com debounce
+  // Navegação de datas: mês usa mês calendário (evita erro de 28/30/31 dias)
   const navigateDate = (direction) => {
-    const days = viewMode === 'day' ? 1 : viewMode === 'week' ? 7 : 30;
-    const newDate = addDays(selectedDate, direction * days);
-    setSelectedDate(newDate);
+    if (viewMode === 'month') {
+      setSelectedDate(addMonths(selectedDate, direction));
+      return;
+    }
+    setSelectedDate(addDays(selectedDate, direction * (viewMode === 'day' ? 1 : 7)));
   };
 
   const handleNewAppointmentSuccess = () => {
