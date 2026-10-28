@@ -9,7 +9,7 @@ import {
   Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { startOfMonth, endOfMonth, format, isSameDay } from "date-fns";
+import { startOfDay, endOfDay, format, isSameDay } from "date-fns";
 import { ptBR } from 'date-fns/locale';
 import { useToast } from "@/components/ui/Toast";
 
@@ -26,6 +26,7 @@ import DateRangePicker from "@/components/finance/DateRangePicker";
 // Hooks, Funções e Entidades
 import { base44 } from "@/api/base44Client";
 import { useDateRange } from "@/components/hooks/useDateRange";
+import { computeAppointmentProfit, summarizeAppointments } from "@/lib/finance";
 
 export default function Financeiro() {
   const [showNewAttendanceModal, setShowNewAttendanceModal] = useState(false);
@@ -36,6 +37,7 @@ export default function Financeiro() {
   const { period, setPeriod, dateRange, setDateRange } = useDateRange('month');
 
   const [lookupData, setLookupData] = useState({ clients: [], services: [] });
+  const [appointments, setAppointments] = useState([]);
   const [financialData, setFinancialData] = useState({
     summary: { revenueTotal: 0, netProfit: 0, ticketMedio: 0, totalApts: 0, series: [] },
     payments: []
@@ -66,29 +68,62 @@ export default function Financeiro() {
     setError(null);
 
     try {
-      // Busca pagamentos confirmados no período (sem função backend)
+      const startDay = format(dateRange.startDate, 'yyyy-MM-dd');
+      const endDay = format(dateRange.endDate, 'yyyy-MM-dd');
+
+      // Receita recebida: pagamentos confirmados no período
       const payments = await base44.entities.Payment.filter({
         status: 'confirmado',
-        date_gte: format(dateRange.startDate, 'yyyy-MM-dd'),
-        date_lte: format(dateRange.endDate, 'yyyy-MM-dd'),
+        date: { $gte: startDay, $lte: endDay },
       }, '-date', 500);
 
-      const revenueTotal = payments.reduce((acc, p) => acc + (p.amount || 0), 0);
-      const totalApts = payments.length;
+      // Atendimentos concluídos no período (base do lucro)
+      const periodAppointments = await base44.entities.Appointment.filter({
+        status: 'concluido',
+        start_time: {
+          $gte: startOfDay(dateRange.startDate).toISOString(),
+          $lte: endOfDay(dateRange.endDate).toISOString(),
+        },
+      }, '-start_time', 500);
+
+      const products = await base44.entities.Product.list('-created_date', 500);
+      const productsById = {};
+      (products || []).forEach((product) => {
+        productsById[product.id] = product;
+      });
+
+      const revenueTotal = (payments || []).reduce((acc, p) => acc + (Number(p.amount) || 0), 0);
+      const appointmentSummary = summarizeAppointments(periodAppointments || [], productsById);
+      const totalApts = (payments || []).length;
       const ticketMedio = totalApts > 0 ? revenueTotal / totalApts : 0;
 
-      // Série diária para o gráfico
+      // Série diária: receita pela data do pagamento, lucro pela data do atendimento
       const seriesMap = {};
-      payments.forEach(p => {
+      (payments || []).forEach(p => {
         const day = p.date || '';
         if (!seriesMap[day]) seriesMap[day] = { date: day, receita: 0, lucro: 0 };
-        seriesMap[day].receita += p.amount || 0;
+        seriesMap[day].receita += Number(p.amount) || 0;
+      });
+      (periodAppointments || []).forEach(apt => {
+        const profit = computeAppointmentProfit(apt, productsById);
+        if (profit === null) return;
+        const day = format(new Date(apt.start_time), 'yyyy-MM-dd');
+        if (!seriesMap[day]) seriesMap[day] = { date: day, receita: 0, lucro: 0 };
+        seriesMap[day].lucro += profit;
       });
       const series = Object.values(seriesMap).sort((a, b) => a.date.localeCompare(b.date));
 
+      setAppointments(periodAppointments || []);
       setFinancialData({
-        summary: { revenueTotal, netProfit: revenueTotal * 0.7, ticketMedio, totalApts, series },
-        payments,
+        summary: {
+          revenueTotal,
+          netProfit: appointmentSummary.profit,
+          ticketMedio,
+          totalApts,
+          series,
+          profitComplete: appointmentSummary.profitComplete,
+        },
+        payments: payments || [],
       });
     } catch (e) {
       const errorMessage = e.message || "Ocorreu um erro inesperado.";
@@ -160,7 +195,8 @@ export default function Financeiro() {
                 const rows = [['Data','Cliente','Serviço','Valor','Método']];
                 payments.forEach(p => {
                   const client = lookupData.clients.find(c => c.id === p.client_id);
-                  const service = lookupData.services.find(s => s.id === p.service_id);
+                  const appointment = appointments.find(a => a.id === p.appointment_id);
+                  const service = lookupData.services.find(s => s.id === appointment?.service_id);
                   rows.push([p.date || '', client?.name || '', service?.name || '', p.amount || '', p.method || '']);
                 });
                 const csv = rows.map(r => r.join(',')).join('\n');
@@ -218,7 +254,7 @@ export default function Financeiro() {
                   showChange={false}
                 />
                 <MetricsCard
-                  title="Lucro Líquido"
+                  title="Lucro Apurado"
                   value={`R$ ${(summary.netProfit || 0).toFixed(2)}`}
                   icon={TrendingUp}
                   color="blue"
@@ -239,6 +275,11 @@ export default function Financeiro() {
                   showChange={false}
                 />
               </div>
+              {summary.profitComplete === false && (
+                <p className="mt-3 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  O lucro considera apenas atendimentos com custo de material registrado.
+                </p>
+              )}
             </section>
 
             <section>
